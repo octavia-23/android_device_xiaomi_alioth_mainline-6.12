@@ -101,3 +101,7 @@ BOARD_AVB_MAKE_VBMETA_IMAGE_ARGS += --flags 3
 BOARD_MOVE_RECOVERY_RESOURCES_TO_VENDOR_BOOT := true
 TARGET_RECOVERY_FSTAB := $(DEVICE_PATH)/configs/fstab.alioth
 TARGET_OTA_ASSERT_DEVICE := alioth,aliothin
+
+# HALs & VINTF Compatibility (Android 17 FCM 202604 uses AIDL APEX com.android.hardware.cas)
+TARGET_REQUIRES_HIDL_CAS_HAL := false
+
