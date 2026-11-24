@@ -4,6 +4,9 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
+# Android 17 FCM 202604 forbids deprecated HIDL CAS HAL in favor of AIDL APEX (com.android.hardware.cas)
+TARGET_REQUIRES_HIDL_CAS_HAL := false
+
 $(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit_only.mk)
 $(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
 

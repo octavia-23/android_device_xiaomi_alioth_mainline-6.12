@@ -14,6 +14,10 @@ endif
 TARGET_QCOM_SOC_FAMILY := sm8250
 $(call inherit-product, device/mainline/qcom-common/mainline_qcom-common.mk)
 
+# Android 17 FCM 202604 forbids deprecated HIDL CAS HAL
+TARGET_REQUIRES_HIDL_CAS_HAL := false
+PRODUCT_PACKAGES_SHIPPING_API_LEVEL_33 := $(filter-out android.hardware.cas@1.2-service,$(PRODUCT_PACKAGES_SHIPPING_API_LEVEL_33))
+
 # Virtual A/B & dynamic partitions
 $(call inherit-product, $(SRC_TARGET_DIR)/product/virtual_ab_ota/compression.mk)
 PRODUCT_USE_DYNAMIC_PARTITIONS := true
