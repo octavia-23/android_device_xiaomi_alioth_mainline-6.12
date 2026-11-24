@@ -1,0 +1,8 @@
+on early-init
+    # Ensure firmware loader sees /vendor/firmware before drm/msm probes Adreno 650
+    write /sys/module/firmware_class/parameters/path /vendor/firmware
+
+on boot
+    # Guarantee DRM KMS + render nodes are accessible by SurfaceFlinger / hwc3 / Mesa
+    chmod 0666 /dev/dri/card0
+    chmod 0666 /dev/dri/renderD128

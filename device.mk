@@ -1,52 +1,54 @@
 #
-# Copyright (C) 2021 The LineageOS Project
+# Copyright (C) 2026 The LineageOS Project
 #
 # SPDX-License-Identifier: Apache-2.0
 #
 
-# A/B
-TARGET_IS_VAB := true
+ifeq ($(wildcard device/xiaomi/alioth_mainline/device.mk),)
+    DEVICE_PATH := device/xiaomi/alioth
+else
+    DEVICE_PATH := device/xiaomi/alioth_mainline
+endif
 
-# Inherit from sm8250-common
-$(call inherit-product, device/xiaomi/sm8250-common/kona.mk)
+# Mainline Qualcomm common product config
+TARGET_QCOM_SOC_FAMILY := sm8250
+$(call inherit-product, device/mainline/qcom-common/mainline_qcom-common.mk)
 
-# AAPT
+# Virtual A/B & dynamic partitions
+$(call inherit-product, $(SRC_TARGET_DIR)/product/virtual_ab_ota/compression.mk)
+PRODUCT_USE_DYNAMIC_PARTITIONS := true
+PRODUCT_SHIPPING_API_LEVEL := 30
+TARGET_FOLLOWS_LATEST_VINTF_TARGET_LEVEL := true
+PRODUCT_OTA_ENFORCE_VINTF_KERNEL_REQUIREMENTS := false
+
+# Memory & storage
+$(call inherit-product, frameworks/native/build/phone-xhdpi-6144-dalvik-heap.mk)
+$(call inherit-product, $(SRC_TARGET_DIR)/product/emulated_storage.mk)
+
+# Display / boot animation
+TARGET_SCREEN_WIDTH := 1080
+TARGET_SCREEN_HEIGHT := 2400
+TARGET_BOOTANIMATION_HALF_RES := true
 PRODUCT_AAPT_CONFIG := normal
 PRODUCT_AAPT_PREF_CONFIG := xxhdpi
 
-# Audio configs
-PRODUCT_COPY_FILES += \
-    $(call find-copy-subdir-files,*,$(LOCAL_PATH)/audio/,$(TARGET_COPY_OUT_VENDOR)/etc)
+# Soong namespace
+PRODUCT_SOONG_NAMESPACES += $(DEVICE_PATH)
 
-# Boot animation
-TARGET_SCREEN_HEIGHT := 2400
-TARGET_SCREEN_WIDTH := 1080
-
-# Camera
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/camera/camera_cnf.txt:$(TARGET_COPY_OUT_VENDOR)/etc/camera/camera_cnf.txt
-
+# Mainline memfd support (from kernel/mainline/configs)
 PRODUCT_PACKAGES += \
-    libpiex_shim
+    use_memfd.rc
 
-# Init
-$(call soong_config_set,xiaomi_kona,variant_lib,//$(LOCAL_PATH):libvariant_xiaomi_alioth)
+# Fstab (both vendor and vendor_boot first_stage_ramdisk) & device init
+PRODUCT_COPY_FILES += \
+    $(DEVICE_PATH)/configs/fstab.alioth:$(TARGET_COPY_OUT_VENDOR)/etc/fstab.alioth \
+    $(DEVICE_PATH)/configs/fstab.alioth:$(TARGET_COPY_OUT_VENDOR_RAMDISK)/first_stage_ramdisk/fstab.alioth \
+    $(DEVICE_PATH)/configs/init.alioth.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/init.alioth.rc
 
-# Overlays
-PRODUCT_PACKAGES += \
-    ApertureOverlayDevice \
-    FrameworkResOverlayDevice \
-    LineageDialerOverlayDevice \
-    LineageSettingsOverlayDevice \
-    LineageSystemUIOverlayDevice \
-    SystemUIOverlayDevice
-
-# Shipping API level
-PRODUCT_SHIPPING_API_LEVEL := 30
-
-# Soong namespaces
-PRODUCT_SOONG_NAMESPACES += \
-    $(LOCAL_PATH)
-
-# Inherit from vendor blobs
-$(call inherit-product, vendor/xiaomi/alioth/alioth-vendor.mk)
+# Adreno 650 GPU firmware (see Section 5 — mandatory for UI!)
+PRODUCT_COPY_FILES += \
+    $(DEVICE_PATH)/firmware/a650_sqe.fw:$(TARGET_COPY_OUT_VENDOR)/firmware/qcom/a650_sqe.fw \
+    $(DEVICE_PATH)/firmware/a650_gmu.bin:$(TARGET_COPY_OUT_VENDOR)/firmware/qcom/a650_gmu.bin \
+    $(DEVICE_PATH)/firmware/a650_zap.mbn:$(TARGET_COPY_OUT_VENDOR)/firmware/qcom/a650_zap.mbn \
+    $(DEVICE_PATH)/firmware/a650_zap.mbn:$(TARGET_COPY_OUT_VENDOR)/firmware/qcom/sm8250/a650_zap.mbn \
+    $(DEVICE_PATH)/firmware/a650_zap.mbn:$(TARGET_COPY_OUT_VENDOR)/firmware/qcom/sm8250/xiaomi/alioth/a650_zap.mbn
