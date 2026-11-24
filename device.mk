@@ -32,8 +32,10 @@ TARGET_BOOTANIMATION_HALF_RES := true
 PRODUCT_AAPT_CONFIG := normal
 PRODUCT_AAPT_PREF_CONFIG := xxhdpi
 
-# Soong namespace
-PRODUCT_SOONG_NAMESPACES += $(DEVICE_PATH)
+# Soong namespaces
+PRODUCT_SOONG_NAMESPACES += \
+    $(DEVICE_PATH) \
+    kernel/mainline/configs
 
 # Mainline memfd support (from kernel/mainline/configs)
 PRODUCT_PACKAGES += \
