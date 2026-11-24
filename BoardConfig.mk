@@ -98,5 +98,6 @@ TARGET_COPY_OUT_ODM := odm
 # Verified Boot (VBMeta) & Recovery
 BOARD_AVB_ENABLE := true
 BOARD_AVB_MAKE_VBMETA_IMAGE_ARGS += --flags 3
+BOARD_MOVE_RECOVERY_RESOURCES_TO_VENDOR_BOOT := true
 TARGET_RECOVERY_FSTAB := $(DEVICE_PATH)/configs/fstab.alioth
 TARGET_OTA_ASSERT_DEVICE := alioth,aliothin

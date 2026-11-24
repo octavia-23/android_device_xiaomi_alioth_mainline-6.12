@@ -21,6 +21,12 @@ PRODUCT_SHIPPING_API_LEVEL := 30
 TARGET_FOLLOWS_LATEST_VINTF_TARGET_LEVEL := true
 PRODUCT_OTA_ENFORCE_VINTF_KERNEL_REQUIREMENTS := false
 
+# Image & OTA packaging configuration
+PRODUCT_BUILD_BOOT_IMAGE := true
+PRODUCT_BUILD_RAMDISK_IMAGE := true
+PRODUCT_BUILD_RECOVERY_IMAGE := true
+PRODUCT_BUILD_GENERIC_OTA_PACKAGE := true
+
 # Memory & storage
 $(call inherit-product, frameworks/native/build/phone-xhdpi-6144-dalvik-heap.mk)
 $(call inherit-product, $(SRC_TARGET_DIR)/product/emulated_storage.mk)
