@@ -45,11 +45,16 @@ BOARD_KERNEL_BASE := 0x00000000
 BOARD_KERNEL_PAGESIZE := 4096
 BOARD_MKBOOTIMG_ARGS += --header_version $(BOARD_BOOT_HEADER_VERSION)
 BOARD_KERNEL_CMDLINE := \
-    androidboot.hardware=qcom \
+    $(MAINLINE_COMMON_ANDROIDBOOT_PARAMS) \
+    $(MAINLINE_COMMON_KERNEL_PARAMS) \
+    $(MAINLINE_QCOM_SOC_ANDROIDBOOT_PARAMS) \
+    $(MAINLINE_QCOM_KERNEL_PARAMS) \
+    androidboot.hardware=alioth \
     androidboot.fstab_suffix=alioth \
     androidboot.usbcontroller=a600000.dwc3 \
     androidboot.init_fatal_reboot_target=recovery \
-    androidboot.selinux=permissive
+    androidboot.selinux=permissive \
+    console=tty0
 
 # Display
 TARGET_SCREEN_DENSITY := 440
@@ -58,6 +63,7 @@ TARGET_SCREEN_DENSITY := 440
 AB_OTA_UPDATER := true
 AB_OTA_PARTITIONS += \
     boot \
+    dtbo \
     odm \
     product \
     system \
@@ -103,7 +109,9 @@ BOARD_AVB_VBMETA_SYSTEM_KEY_PATH := external/avb/test/data/testkey_rsa4096.pem
 BOARD_AVB_VBMETA_SYSTEM_ALGORITHM := SHA256_RSA4096
 BOARD_AVB_VBMETA_SYSTEM_ROLLBACK_INDEX := $(PLATFORM_SECURITY_PATCH_TIMESTAMP)
 BOARD_AVB_VBMETA_SYSTEM_ROLLBACK_INDEX_LOCATION := 1
-BOARD_MOVE_RECOVERY_RESOURCES_TO_VENDOR_BOOT := true
+BOARD_RECOVERYIMAGE_PARTITION_SIZE := 134217728
+BOARD_PREBUILT_DTBOIMAGE := $(DEVICE_PATH)/prebuilt/dtbo.img
+BOARD_DTBOIMG_PARTITION_SIZE := 33554432
 TARGET_RECOVERY_FSTAB := $(DEVICE_PATH)/configs/fstab.alioth
 TARGET_OTA_ASSERT_DEVICE := alioth,aliothin
 

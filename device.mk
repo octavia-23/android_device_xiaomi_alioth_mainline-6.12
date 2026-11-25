@@ -19,7 +19,7 @@ TARGET_REQUIRES_HIDL_CAS_HAL := false
 PRODUCT_PACKAGES_SHIPPING_API_LEVEL_33 := $(filter-out android.hardware.cas@1.2-service,$(PRODUCT_PACKAGES_SHIPPING_API_LEVEL_33))
 
 # Virtual A/B & dynamic partitions
-$(call inherit-product, $(SRC_TARGET_DIR)/product/virtual_ab_ota/compression.mk)
+$(call inherit-product, $(SRC_TARGET_DIR)/product/virtual_ab_ota/launch_with_vendor_ramdisk.mk)
 PRODUCT_USE_DYNAMIC_PARTITIONS := true
 PRODUCT_SHIPPING_API_LEVEL := 30
 TARGET_FOLLOWS_LATEST_VINTF_TARGET_LEVEL := true
@@ -55,7 +55,8 @@ PRODUCT_PACKAGES += \
 PRODUCT_COPY_FILES += \
     $(DEVICE_PATH)/configs/fstab.alioth:$(TARGET_COPY_OUT_VENDOR)/etc/fstab.alioth \
     $(DEVICE_PATH)/configs/fstab.alioth:$(TARGET_COPY_OUT_VENDOR_RAMDISK)/first_stage_ramdisk/fstab.alioth \
-    $(DEVICE_PATH)/configs/init.alioth.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/init.alioth.rc
+    $(DEVICE_PATH)/configs/fstab.alioth:$(TARGET_COPY_OUT_VENDOR_RAMDISK)/first_stage_ramdisk/system/etc/fstab.alioth \
+    $(DEVICE_PATH)/configs/init.alioth.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.alioth.rc
 
 # Adreno 650 GPU firmware (see Section 5 — mandatory for UI!)
 PRODUCT_COPY_FILES += \

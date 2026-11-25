@@ -1,6 +1,18 @@
+import /vendor/etc/init/hw/init.mainline.qcom.rc
+
 on early-init
     # Ensure firmware loader sees /vendor/firmware before drm/msm probes Adreno 650
     write /sys/module/firmware_class/parameters/path /vendor/firmware
+
+on early-fs
+    start vold
+
+on fs
+    mount_all /vendor/etc/fstab.alioth --early
+    swapon_all /vendor/etc/fstab.alioth
+
+on late-fs
+    mount_all /vendor/etc/fstab.alioth --late
 
 on boot
     # Guarantee DRM KMS + render nodes are accessible by SurfaceFlinger / hwc3 / Mesa
